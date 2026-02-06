@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Be My Valentine?</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#ffd6e7;
+      --bg2:#fff2f7;
+      --card:rgba(255,255,255,.72);
+      --stroke:rgba(255,255,255,.75);
+      --text:#2a1b22;
+      --muted:#6a4654;
+
+      --yes1:#ff3d7f;
+      --yes2:#ff7aa8;
+
+      --shadow:0 22px 80px rgba(0,0,0,.14);
+      --shadow2:0 14px 34px rgba(0,0,0,.10);
+
+      --ring:0 0 0 5px rgba(255,61,127,.18);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      overflow:hidden;
+
+      background:
+        radial-gradient(900px 600px at 20% 20%, rgba(255,255,255,.85), transparent 60%),
+        radial-gradient(800px 520px at 80% 10%, rgba(255,255,255,.65), transparent 55%),
+        radial-gradient(700px 520px at 70% 90%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+    }
+
+    /* soft sparkles */
+    .sparkles{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.65;
+    }
+    .sparkle{
+      position:absolute;
+      width:2px;height:2px;
+      border-radius:999px;
+      background:rgba(255,255,255,.95);
+      box-shadow: 0 0 10px rgba(255,255,255,.55);
+      animation: twinkle ease-in-out infinite;
+    }
+    @keyframes twinkle{
+      0%,100%{ transform:scale(.75); opacity:.35; }
+      50%{ transform:scale(1.75); opacity:1; }
+    }
+
+    /* floating hearts */
+    .floatHearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.55;
+      filter: blur(.1px);
+    }
+    .heart{
+      position:absolute;
+      width:16px;height:16px;
+      transform: rotate(45deg);
+      background: rgba(255,61,127,.22);
+      border-radius:4px;
+      animation: floatUp linear infinite;
+    }
+    .heart::before,.heart::after{
+      content:"";
+      position:absolute;
+      width:16px;height:16px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart::before{ left:-8px; top:0; }
+    .heart::after{ top:-8px; left:0; }
+
+    @keyframes floatUp{
+      from{ transform: translateY(20vh) rotate(45deg); opacity:0; }
+      15%{ opacity:.65; }
+      to{ transform: translateY(-120vh) rotate(45deg); opacity:0; }
+    }
+
+    .card{
+      width:min(720px, 94vw);
+      background:var(--card);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 34px 28px 26px;
+      text-align:center;
+      position:relative;
+    }
+
+    .topBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,61,127,.18);
+      box-shadow: var(--shadow2);
+      color: rgba(106,70,84,.95);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing:.2px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(135deg, var(--yes1), var(--yes2));
+      box-shadow: 0 0 0 5px rgba(255,61,127,.12);
+    }
+
+    h1{
+      font-family:"Playfair Display", serif;
+      font-size: clamp(34px, 4.6vw, 52px);
+      margin: 14px 0 10px;
+      letter-spacing:.2px;
+      line-height:1.05;
+    }
+
+    p{
+      color:var(--muted);
+      margin: 0 auto 18px;
+      font-size: 16px;
+      line-height:1.6;
+      max-width: 52ch;
+    }
+
+    .miniRow{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+      margin: 14px 0 18px;
+    }
+    .pill{
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+      color:#7a3b55;
+      font-weight:700;
+      font-size: 13px;
+    }
+
+    .arena{
+      margin: 14px auto 0;
+      width: min(620px, 100%);
+      border-radius: 22px;
+      padding: 18px 16px 16px;
+      background:
+        radial-gradient(260px 160px at 22% 35%, rgba(255,61,127,.16), transparent 70%),
+        radial-gradient(260px 160px at 78% 65%, rgba(255,122,168,.14), transparent 70%),
+        rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: 0 18px 55px rgba(0,0,0,.10);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .actions{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 12px;
+      position:relative;
+      min-height: 58px; /* keeps layout stable when "No" moves */
+    }
+
+    button{
+      border:none;
+      border-radius:999px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #yesBtn{
+      background: linear-gradient(135deg, var(--yes1), var(--yes2));
+      color:#fff;
+      box-shadow: 0 16px 34px rgba(255,61,127,.26);
+      outline:none;
+      min-width: 170px;
+    }
+    #yesBtn:hover{ transform: translateY(-1px) scale(1.02); filter: brightness(1.03); }
+    #yesBtn:focus{ box-shadow: 0 16px 34px rgba(255,61,127,.26), var(--ring); }
+
+    #noBtn{
+      background: rgba(255,255,255,.92);
+      color:#5a3543;
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+      min-width: 170px;
+      position:relative;
+    }
+    #noBtn:hover{ transform: translateY(-1px); }
+
+    .result{
+      display:none;
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.80);
+      border: 1px solid rgba(255,61,127,.18);
+      box-shadow: 0 14px 40px rgba(0,0,0,.08);
+      color:#c2185b;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
+
+    .smallNote{
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(106,70,84,.75);
+    }
+
+    @media (max-width:420px){
+      .card{ padding: 28px 18px 22px; border-radius: 26px; }
+      button{ width:100%; }
+      #yesBtn,#noBtn{ min-width: unset; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+  <div class="floatHearts" id="floatHearts" aria-hidden="true"></div>
+
+  <main class="card">
+    <div class="topBadge"><span class="dot"></span> Valentine Invitation</div>
+
+    <h1>ZARAAAAAA Will you be my Valentine?</h1>
+    <p>
+      I’m asking you properly.
+      Will you be mine on this day.
+    </p>
+
+    <div class="miniRow" aria-hidden="true">
+      <span class="pill">💐 Flowers</span>
+      <span class="pill">🍫 Chocolate</span>
+      <span class="pill">🍓 Dessert</span>
+    </div>
+
+    <section class="arena">
+      <div class="actions">
+        <button id="yesBtn" type="button">Yes 💖</button>
+        <button id="noBtn" type="button">No 🙃</button>
+      </div>
+
+      <div class="result" id="result">HOORAY 💘🎉</div>
+      <div class="smallNote">One question. One right answer.</div>
+    </section>
+  </main>
+
+  <script>
+    // Sparkles
+    (function makeSparkles(){
+      const wrap = document.getElementById("sparkles");
+      const count = 70;
+      for (let i = 0; i < count; i++){
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        s.style.left = (Math.random() * 100) + "vw";
+        s.style.top = (Math.random() * 100) + "vh";
+        s.style.animationDuration = (1.2 + Math.random() * 3.5) + "s";
+        s.style.animationDelay = (-Math.random() * 4) + "s";
+        s.style.opacity = (0.20 + Math.random() * 0.80).toFixed(2);
+        wrap.appendChild(s);
+      }
+    })();
+
+    // Floating hearts
+    (function makeHearts(){
+      const wrap = document.getElementById("floatHearts");
+      const count = 18;
+      for (let i = 0; i < count; i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        const size = 10 + Math.random() * 22;
+        h.style.width = size + "px";
+        h.style.height = size + "px";
+        h.style.left = (Math.random() * 100) + "vw";
+        h.style.bottom = (-10 - Math.random() * 35) + "vh";
+        h.style.animationDuration = (7 + Math.random() * 9) + "s";
+        h.style.animationDelay = (-Math.random() * 12) + "s";
+        h.style.opacity = (0.14 + Math.random() * 0.42).toFixed(2);
+        wrap.appendChild(h);
+      }
+    })();
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const result = document.getElementById("result");
+
+    const messages = [
+      "No? Wrong answer.",
+      "Be serious.",
+      "You can’t be serious.",
+      "Nice try. Still no.",
+      "That’s not the right button.",
+      "Incorrect. Please retry.",
+      "System error. Only Yes works.",
+      "Let’s pretend that didn’t happen.",
+      "Absolutely not. Try again.",
+      "Error 404: No not found."
+    ];
+
+    let msgIndex = 0;
+    let yesScale = 1;
+
+    function growYes(){
+      yesScale = Math.min(2.4, yesScale + 0.18);
+      yesBtn.style.transform = `scale(${yesScale})`;
+      yesBtn.style.boxShadow = `0 18px 46px rgba(255,61,127,${0.22 + (yesScale - 1) * 0.20})`;
+    }
+
+    noBtn.addEventListener("click", () => {
+      growYes();
+
+      noBtn.textContent = messages[msgIndex];
+      msgIndex = (msgIndex + 1) % messages.length;
+
+      const dx = Math.random() * 120 - 60;
+      const dy = Math.random() * 60 - 30;
+      noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      result.style.display = "block";
+      yesBtn.textContent = "YES 💖";
+      noBtn.style.display = "none";
+      yesBtn.style.transform = "scale(1.18)";
+
+      // quick heart burst
+      const wrap = document.getElementById("floatHearts");
+      for (let i = 0; i < 14; i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        const size = 12 + Math.random() * 26;
+        h.style.width = size + "px";
+        h.style.height = size + "px";
+        h.style.left = (45 + (Math.random() * 16 - 8)) + "vw";
+        h.style.bottom = (6 + Math.random() * 10) + "vh";
+        h.style.opacity = "0.65";
+        h.style.animationDuration = (2.8 + Math.random() * 2.2) + "s";
+        wrap.appendChild(h);
+        setTimeout(() => h.remove(), 5200);
+      }
+    });
+  </script>
+</body>
+</html>
